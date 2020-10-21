@@ -1,5 +1,15 @@
 const express = require("express");
 const server = express();
+const mysql = require("mysql");
+const conn = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "passoword",
+});
+
+conn.connect(() => {
+  console.log("Mysql with socker container connected");
+});
 
 server.use(express.json());
 process.PORT = 3333;
@@ -61,14 +71,14 @@ server.delete("/users/:id", checkUserInArray, function (req, res) {
   return res.json({ message: "Usuário deletado com sucesso!" });
 });
 
-server.get("/helloworld", function (req, res) {
-  res.send("Como eh que ta ai meu parcero");
-});
-
 server.listen(process.PORT, function (erro) {
   if (erro) {
     console.log("Erro");
   } else {
     console.log("Servidor rodando na porta " + process.PORT);
   }
+});
+
+conn.end(() => {
+  console.log("MySQL disconnected");
 });
